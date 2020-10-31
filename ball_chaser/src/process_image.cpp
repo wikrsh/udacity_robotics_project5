@@ -33,15 +33,19 @@ void process_image_callback(const sensor_msgs::Image img)
     int count_mid = 0;
     int count_right = 0;
 
-    for (int r = 0; r < img.height; r++) {
-        for (int c = 0; c < img.step; c++) {
-            if (img.data[r * img.step + c] != white_pixel) {
+    for (int h = 0; h < img.height; h++) {
+        for (int w = 0; w < img.width; w++) {
+            int i = 3 * (h * img.width + w);
+            int r = img.data[i];
+            int g = img.data[i+1];
+            int b = img.data[i+2];
+            if (r != white_pixel || g != white_pixel || b != white_pixel) {
                 continue;
             }
 
-            if (c < img.step / 3) {
+            if (w < img.width / 3) {
                 count_left++;
-            } else if (c < (2 * img.step / 3)) {
+            } else if (w < (2 * img.width / 3)) {
                 count_mid++;
             } else {
                 count_right++;
